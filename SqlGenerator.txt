@@ -1,0 +1,72 @@
+CREATE DATABASE petShopSQL
+USE petShopSQL
+
+CREATE TABLE Loggs (
+                    Id INT PRIMARY KEY IDENTITY(1,1),
+                    LoggedUser NVARCHAR(255) NOT NULL,
+                    UserId INT NOT NULL,
+                    LoggedDate DATETIME NOT NULL DEFAULT GETDATE()
+                );
+
+
+CREATE TABLE Users (
+                    Id INT PRIMARY KEY IDENTITY(1,1),
+                    FirstName NVARCHAR(100) NOT NULL,
+                    LastName NVARCHAR(100) NOT NULL,
+                    Age INT NOT NULL,
+		    Balance float,
+                    ContactNumber INT NOT NULL,
+                    Email NVARCHAR(255) NOT NULL,
+                    Password NVARCHAR(255) NOT NULL,
+                    Address NVARCHAR(255) NOT NULL,
+                    Role NVARCHAR(50) NOT NULL DEFAULT 'User'
+                );
+
+CREATE TABLE Categories (
+				Id INT PRIMARY KEY IDENTITY(1,1),
+				Name NVARCHAR(255) NOT NULL);
+
+				INSERT INTO Categories (Name) VALUES ('Toys');
+				INSERT INTO Categories (Name) VALUES ('Foods');
+				INSERT INTO Categories (Name) VALUES ('Health');
+				INSERT INTO Categories (Name) VALUES ('Cages');
+				INSERT INTO Categories (Name) VALUES ('Other');
+
+
+CREATE TABLE Products (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    Name NVARCHAR(255) NOT NULL,
+    Description NVARCHAR(MAX),
+    Price DECIMAL(18,2) NOT NULL,
+    Quantity INT NOT NULL,
+    IsAvailable BIT NOT NULL,
+    CategoryId INT FOREIGN KEY REFERENCES Categories(Id)
+);
+
+CREATE TABLE Bank (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    Balance FLOAT
+);
+
+SET IDENTITY_INSERT dbo.bank ON
+INSERT INTO dbo.bank(Id, Balance)
+VALUES(1,0)
+SET IDENTITY_INSERT dbo.bank OFF
+
+
+
+INSERT INTO dbo.users(FirstName,LastName,Age,Balance,Email,Password,Role,ContactNumber,Address)
+VALUES('Admin123','Admin123',33,9999,'Admin123@gmail.com','Admin123','Admin',599999999,'Georgia,Tbilisi');
+
+
+
+CREATE TABLE Purchases (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    UserId INT,
+    BuyingDate DATETIME,
+    ProductId INT,
+    TotalPayment FLOAT,
+    Quantity INT,
+    FOREIGN KEY (UserId) REFERENCES Users(Id),
+    FOREIGN KEY (ProductId) REFERENCES Products(Id)
+);
